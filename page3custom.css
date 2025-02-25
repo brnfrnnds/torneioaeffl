@@ -71,7 +71,7 @@ body {
   transform-origin: center;
 }
 
-.container {
+.containerTabela {
   max-width: 1100px;
   min-height: 800px;
   margin: 0 auto;
@@ -206,7 +206,7 @@ body {
   height: 52px;
 }
 
-.share .container {
+.share .containerTabela {
   margin: 0 auto;
   text-align: center;
 }
@@ -284,7 +284,7 @@ body {
 }
 
 @media screen and (min-width: 980px) {
-  .container {
+  .containerTabela {
     -webkit-flex-direction: column;
     -moz-flex-direction: column;
     flex-direction: column;
