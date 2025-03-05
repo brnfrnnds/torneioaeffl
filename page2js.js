@@ -18,52 +18,41 @@ async function createPlayers(equipa){
     
     return jogadoresTxt
 }
-const { data: equipas, error } = await supabase
-    .from('Equipas')
-    .select('nome')
-    .order('id', {ascending: true}).then((equipas) => {
-        for (let i = 0; i < equipas.length; i++){
-            equipasTxt += `
-            <section data-bs-version="5.1" class="content8 cid-uDicwWe5wP" id="content8-j">
-        
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="counter-container col-md-12 col-lg-8">
-                            <h4 class="mbr-section-title mbr-fonts-style mb-4 display-5"><strong>Equipa ${i+1} - ${equipas[i]}</strong></h4>
-                            <div class="mbr-text mbr-fonts-style display-7">
-                                <ul>
-                                    ${createPlayers(equipas[i].nome)}
-                                </ul>
-                            </div>
+
+async function loadEquipas() {
+    const { data: equipas, error } = await supabase
+        .from('Equipas')
+        .select('nome')
+        .order('id', {ascending: true})
+
+    if (error) {
+        console.error('Error fetching equipas:', error)
+        return
+    }
+
+    var equipasTxt = ""
+
+    for (let i = 0; i < equipas.length; i++){
+        equipasTxt += `
+        <section data-bs-version="5.1" class="content8 cid-uDicwWe5wP" id="content8-j">
+    
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="counter-container col-md-12 col-lg-8">
+                        <h4 class="mbr-section-title mbr-fonts-style mb-4 display-5"><strong>Equipa ${i+1} - ${equipas[i].nome}</strong></h4>
+                        <div class="mbr-text mbr-fonts-style display-7">
+                            <ul>
+                                ${await createPlayers(equipas[i].nome)}
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </section>
-            `
-        }   
-    })
-
-
-var equipasTxt = ""
-
-for (let i = 0; i < equipas.length; i++){
-    equipasTxt += `
-    <section data-bs-version="5.1" class="content8 cid-uDicwWe5wP" id="content8-j">
-
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="counter-container col-md-12 col-lg-8">
-                    <h4 class="mbr-section-title mbr-fonts-style mb-4 display-5"><strong>Equipa ${i+1} - ${equipas[i]}</strong></h4>
-                    <div class="mbr-text mbr-fonts-style display-7">
-                        <ul>
-                            ${await createPlayers(equipas[i].nome)}
-                        </ul>
-                    </div>
-                </div>
             </div>
-        </div>
-    </section>
-    `
-}   
+        </section>
+        `
+    }   
 
-bodyElement.innerHTML.replace("A carregar equipas...", equipasTxt)
+    bodyElement.innerHTML = bodyElement.innerHTML.replace("A carregar equipas...", equipasTxt)
+}
+
+loadEquipas()
